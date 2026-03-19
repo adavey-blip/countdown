@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { 
+            background: #1f454a; 
+            color: white; 
+            font-family: 'Arial Black', sans-serif;
+            display: flex;
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .main-title {
+            font-size: 55px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .counter-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 80px; 
+        }
+
+        .subject-box { text-align: center; min-width: 140px; }
+
+        .count { 
+            font-size: 150px; /* Adjusted to fit 4 subjects */
+            font-weight: 900; 
+            line-height: 0.8; 
+            margin: 0; 
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .label { 
+            font-size: 42px; 
+            text-transform: uppercase; 
+            color: #a0c4ff; 
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 class="main-title">LESSONS REMAINING</h1>
+
+    <div class="counter-wrapper">
+        <div class="subject-box">
+            <p class="count" id="maths">--</p>
+            <p class="label">Maths</p>
+        </div>
+        <div class="subject-box">
+            <p class="count" id="english">--</p>
+            <p class="label">English</p>
+        </div>
+        <div class="subject-box">
+            <p class="count" id="science">--</p>
+            <p class="label">Science</p>
+        </div>
+        <div class="subject-box">
+            <p class="count" id="other">--</p>
+            <p class="label">Options</p>
+        </div>
+    </div>
+
+    <script>
+        function updateCounters() {
+            // --- EDIT YOUR STARTING TOTALS HERE ---
+            const startMaths = 31;
+            const startEnglish = 25;
+            const startScience = 25;
+            const startOther = 15;
+
+            // --- EDIT YOUR START DATE HERE ---
+            const startDate = new Date('2026-03-18T00:00:00');
+            const today = new Date();
+            
+            let mathsToSub = 0;
+            let englishToSub = 0;
+            let scienceToSub = 0;
+            let otherToSub = 0;
+
+            let d = new Date(startDate);
+            // Walk through each day from start until now
+            while (d < today) {
+                const dayOfWeek = d.getDay(); 
+                const isWeekday = (dayOfWeek !== 0 && dayOfWeek !== 6);
+
+                if (isWeekday) {
+                    mathsToSub += 1.2;    // 6 per week
+                    englishToSub += 1;    // 1 per day
+                    scienceToSub += 1;    // 1 per day
+                    otherToSub += 0.6;    // 3 per week
+                }
+                d.setDate(d.getDate() + 1);
+            }
+
+            // Math.round ensures the student only ever sees a whole number
+            document.getElementById('maths').innerText = Math.max(0, Math.round(startMaths - mathsToSub));
+            document.getElementById('english').innerText = Math.max(0, Math.round(startEnglish - englishToSub));
+            document.getElementById('science').innerText = Math.max(0, Math.round(startScience - scienceToSub));
+            document.getElementById('other').innerText = Math.max(0, Math.round(startOther - otherToSub));
+        }
+
+        updateCounters();
+        setInterval(updateCounters, 3600000); // Check for day changes every hour
+    </script>
+</body>
+</html>
